@@ -133,3 +133,33 @@ class AdaptiveCodingApp:
                        f"Метод: Адаптация существующей маршрутной карты."
 
         messagebox.showinfo("Результат работы подсистемы", analogue_msg)
+
+    def save_to_file(self):
+        if not hasattr(self, 'final_code'):
+            messagebox.showwarning("Ошибка", "Сначала сформируйте код!")
+            return
+
+        try:
+            filename = "report_code.txt"
+            with open(filename, "a", encoding="utf-8") as f:
+                f.write(f"--- ЗАПИСЬ ОТ {datetime.datetime.now()} ---\n")
+                f.write(f"Тип детали: {self.var_type.get()}\n")
+                f.write(f"Материал:   {self.var_mat.get()}\n")
+                f.write(f"Размер:     {self.var_size.get()}\n")
+                f.write(f"Точность:   {self.var_acc.get()}\n")
+                f.write(f"Шерох-сть:  {self.var_rough.get()}\n")
+                f.write(f"ИТОГОВЫЙ КОД: {self.final_code}\n")
+                f.write("-" * 30 + "\n\n")
+
+            messagebox.showinfo("Сохранение", f"Данные успешно добавлены в файл {filename}")
+        except Exception as e:
+            messagebox.showerror("Ошибка сохранения", str(e))
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    style = ttk.Style()
+    style.theme_use('clam')
+
+    app = AdaptiveCodingApp(root)
+    root.mainloop()
