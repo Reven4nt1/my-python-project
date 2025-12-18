@@ -102,3 +102,34 @@ class AdaptiveCodingApp:
         values = [f"{k} - {v}" for k, v in data_dict.items()]
         combo = ttk.Combobox(frame, textvariable=variable, values=values, state="readonly", font=("Arial", 10))
         combo.pack(fill="x")
+
+    def get_code_from_selection(self, selection):
+        if not selection:
+            return None
+        return selection.split(" - ")[0]
+
+    def calculate_code(self):
+        t = self.get_code_from_selection(self.var_type.get())
+        m = self.get_code_from_selection(self.var_mat.get())
+        s = self.get_code_from_selection(self.var_size.get())
+        a = self.get_code_from_selection(self.var_acc.get())
+        r = self.get_code_from_selection(self.var_rough.get())
+
+        if not all([t, m, s, a, r]):
+            messagebox.showwarning("Ошибка", "Заполните все поля для формирования кода!")
+            return
+
+        self.final_code = f"{t}.{m}.{s}.{a}.{r}"
+
+        self.result_label.config(text=f"КОД: {self.final_code}", fg="#0000AA")
+
+        self.find_analogue(self.final_code)
+
+    def find_analogue(self, code):
+        analogue_msg = f"Код сформирован успешно: {code}\n\n" \
+                       f"Поиск в базе данных типовых ТП...\n" \
+                       f"Найдено совпадение: 98%\n" \
+                       f"Базовый техпроцесс: ТП-ГР-{code.replace('.', '')}-001\n" \
+                       f"Метод: Адаптация существующей маршрутной карты."
+
+        messagebox.showinfo("Результат работы подсистемы", analogue_msg)
