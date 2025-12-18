@@ -3,6 +3,8 @@ from tkinter import ttk
 from tkinter import messagebox
 import datetime
 
+#коммент для пула
+
 DB_TYPES = {
     "10": "Тело вращения (Вал / Ось)",
     "20": "Тело вращения полое (Втулка / Гильза / Диск)",
