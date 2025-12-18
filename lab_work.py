@@ -45,3 +45,60 @@ DB_ROUGHNESS = {
     "4": "Получистовая (Ra 6.3 - 12.5)",
     "5": "Черновая (Ra > 12.5)"
 }
+
+class AdaptiveCodingApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("АСТПП: Подсистема кодирования (Задание 4)")
+        self.root.geometry("600x650")
+        self.root.resizable(False, False)
+
+        self.var_type = tk.StringVar()
+        self.var_mat = tk.StringVar()
+        self.var_size = tk.StringVar()
+        self.var_acc = tk.StringVar()
+        self.var_rough = tk.StringVar()
+
+        self.create_widgets()
+
+    def create_widgets(self):
+        header_frame = tk.Frame(self.root, bg="#e1e1e1", pady=10)
+        header_frame.pack(fill="x")
+        tk.Label(header_frame, text="Кодирование детали для адаптивного планирования",
+                 font=("Arial", 14, "bold"), bg="#e1e1e1").pack()
+        tk.Label(header_frame, text="Формирование конструкторско-технологического кода",
+                 font=("Arial", 10), bg="#e1e1e1").pack()
+
+        main_frame = tk.Frame(self.root, padx=20, pady=20)
+        main_frame.pack(fill="both", expand=True)
+
+        self.create_combobox(main_frame, "1. Конструктивный тип детали:", DB_TYPES, self.var_type)
+        self.create_combobox(main_frame, "2. Материал заготовки:", DB_MATERIALS, self.var_mat)
+        self.create_combobox(main_frame, "3. Максимальный габарит:", DB_SIZES, self.var_size)
+        self.create_combobox(main_frame, "4. Квалитет точности (основной):", DB_ACCURACY, self.var_acc)
+        self.create_combobox(main_frame, "5. Шероховатость поверхности (Ra):", DB_ROUGHNESS, self.var_rough)
+
+        btn_frame = tk.Frame(self.root, pady=20)
+        btn_frame.pack(side="bottom", fill="x")
+
+        tk.Button(btn_frame, text="Сформировать код и найти аналог",
+                  command=self.calculate_code,
+                  bg="#4CAF50", fg="white", font=("Arial", 11, "bold"), height=2).pack(fill="x", padx=20, pady=5)
+
+        tk.Button(btn_frame, text="Сохранить в отчет",
+                  command=self.save_to_file,
+                  font=("Arial", 10)).pack(fill="x", padx=20, pady=5)
+
+        self.result_label = tk.Label(main_frame, text="Код не сформирован",
+                                     font=("Courier New", 16, "bold"), fg="red", pady=20)
+        self.result_label.pack()
+
+    def create_combobox(self, parent, label_text, data_dict, variable):
+        frame = tk.Frame(parent, pady=5)
+        frame.pack(fill="x")
+
+        tk.Label(frame, text=label_text, font=("Arial", 10, "bold"), anchor="w").pack(fill="x")
+
+        values = [f"{k} - {v}" for k, v in data_dict.items()]
+        combo = ttk.Combobox(frame, textvariable=variable, values=values, state="readonly", font=("Arial", 10))
+        combo.pack(fill="x")
